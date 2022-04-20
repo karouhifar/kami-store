@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/7559abda-ec62-4f86-8ab8-09d58b753a34/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/apiWebServerDotNet",
+  "appService.deploySubpath": "publish"
+}
