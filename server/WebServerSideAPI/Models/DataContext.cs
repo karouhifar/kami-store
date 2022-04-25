@@ -19,6 +19,8 @@ namespace WebServerSideAPI.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Categories>()
             .HasMany<Products>(p => p.Products)
             .WithOne(c => c.Categories)
@@ -69,12 +71,6 @@ namespace WebServerSideAPI.Models
                    Picture = "https://www.cnet.com/a/img/resize/6332121a72aa55809d320f7315d15f9983270b63/2021/09/21/643c0f64-e568-4fbc-94be-d6dde9acd27c/iphone-13-pro-max-cnet-review-2021-128.jpg?auto=webp&width=940"
                });
             });
-
-         
-
-
-
-            base.OnModelCreating(modelBuilder);
         }
 
      

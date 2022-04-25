@@ -2,7 +2,7 @@
 
 namespace WebServerSideAPI.Migrations
 {
-    public partial class initSQLite : Migration
+    public partial class initail : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -35,6 +35,7 @@ namespace WebServerSideAPI.Migrations
                     unitsOnOrder = table.Column<int>(type: "INTEGER", nullable: false),
                     reorderLevel = table.Column<int>(type: "INTEGER", nullable: false),
                     discontinued = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Picture = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: true),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -55,13 +56,13 @@ namespace WebServerSideAPI.Migrations
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "productID", "CategoryId", "discontinued", "productName", "quantityPerUnit", "reorderLevel", "supplierId", "unitPrice", "unitsInStock", "unitsOnOrder" },
-                values: new object[] { 1, 1, true, "Hard Derive", 43, 5, 235, 43.6m, 7, 3 });
+                columns: new[] { "productID", "CategoryId", "Picture", "discontinued", "productName", "quantityPerUnit", "reorderLevel", "supplierId", "unitPrice", "unitsInStock", "unitsOnOrder" },
+                values: new object[] { 1, 1, "https://m.media-amazon.com/images/I/71nK57McdyL._AC_SX679_.jpg", true, "Hard Drive", 43, 5, 235, 43.6m, 7, 3 });
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "productID", "CategoryId", "discontinued", "productName", "quantityPerUnit", "reorderLevel", "supplierId", "unitPrice", "unitsInStock", "unitsOnOrder" },
-                values: new object[] { 2, 1, false, "Iphone", 45, 2, 532, 53.6m, 2, 6 });
+                columns: new[] { "productID", "CategoryId", "Picture", "discontinued", "productName", "quantityPerUnit", "reorderLevel", "supplierId", "unitPrice", "unitsInStock", "unitsOnOrder" },
+                values: new object[] { 2, 1, "https://www.cnet.com/a/img/resize/6332121a72aa55809d320f7315d15f9983270b63/2021/09/21/643c0f64-e568-4fbc-94be-d6dde9acd27c/iphone-13-pro-max-cnet-review-2021-128.jpg?auto=webp&width=940", false, "Iphone", 45, 2, 532, 53.6m, 2, 6 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",

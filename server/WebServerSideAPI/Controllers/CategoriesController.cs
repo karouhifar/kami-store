@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,22 +12,40 @@ using WebServerSideAPI.Repositories;
 namespace WebServerSideAPI.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class CategoriesController : ControllerBase
     {
         private readonly DataContext db;
-        public CategoriesController(DataContext db)
+        private readonly IJWTManagerRepository jWTManager;
+        public CategoriesController(DataContext db, IJWTManagerRepository jWTManager)
         {
             this.db = db;
+            this.jWTManager = jWTManager;
         }
-
         //-----------------------------------------------------------------------------
-        //---------------------------  GET METHODS   ----------------------------------
+        //---------------------------  Auth METHODS   ----------------------------------
         //-----------------------------------------------------------------------------
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate(Users usersdata)
+        {
+            try
+            {
+                var token = jWTManager.Authenticate(usersdata);
+                return Ok(token);
+            } catch (Exception o)
+            {
+                return Unauthorized("There is no user registered to this application");
+            }       
+        }
+            //-----------------------------------------------------------------------------
+            //---------------------------  GET METHODS   ----------------------------------
+            //-----------------------------------------------------------------------------
 
-        // --- Get all only Categories
+            // --- Get all only Categories
 
-        [HttpGet]
+            [HttpGet]
         public IActionResult GetCategories()
         {
             return Ok(db.Categories.ToList());
@@ -48,7 +67,7 @@ namespace WebServerSideAPI.Controllers
                             CategoriesName = c.CategoryName,
                             Description = c.Description,
                             Picture = c.Picture,
-                            Product = AllData.Distinct().Select(a => new
+                            Product =  AllData.Distinct().Select(a => new
                             {
                                 productName = a.productName,
                                 supplierId = a.supplierId,

@@ -8,8 +8,8 @@ using WebServerSideAPI.Models;
 namespace WebServerSideAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220331171921_initSQLite")]
-    partial class initSQLite
+    [Migration("20220422002058_initail")]
+    partial class initail
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,6 +59,10 @@ namespace WebServerSideAPI.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Picture")
+                        .HasMaxLength(10000)
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("discontinued")
                         .HasColumnType("INTEGER");
 
@@ -96,8 +100,9 @@ namespace WebServerSideAPI.Migrations
                         {
                             productID = 1,
                             CategoryId = 1,
+                            Picture = "https://m.media-amazon.com/images/I/71nK57McdyL._AC_SX679_.jpg",
                             discontinued = true,
-                            productName = "Hard Derive",
+                            productName = "Hard Drive",
                             quantityPerUnit = 43,
                             reorderLevel = 5,
                             supplierId = 235,
@@ -109,6 +114,7 @@ namespace WebServerSideAPI.Migrations
                         {
                             productID = 2,
                             CategoryId = 1,
+                            Picture = "https://www.cnet.com/a/img/resize/6332121a72aa55809d320f7315d15f9983270b63/2021/09/21/643c0f64-e568-4fbc-94be-d6dde9acd27c/iphone-13-pro-max-cnet-review-2021-128.jpg?auto=webp&width=940",
                             discontinued = false,
                             productName = "Iphone",
                             quantityPerUnit = 45,
