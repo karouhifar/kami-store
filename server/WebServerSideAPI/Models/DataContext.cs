@@ -16,6 +16,8 @@ namespace WebServerSideAPI.Models
 
         public DbSet<Products> Products { get; set; }
 
+        public DbSet<Users> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -26,6 +28,9 @@ namespace WebServerSideAPI.Models
             .WithOne(c => c.Categories)
             .HasForeignKey(s => s.CategoryId)
             .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Users>().Ignore(m => m.MatchPassword);
+            modelBuilder.Entity<Users>().HasIndex(x => x.Name).IsUnique();
 
             modelBuilder.Entity<Categories>(entity =>
             {

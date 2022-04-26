@@ -39,8 +39,8 @@ namespace WebServerSideAPI
                o.SaveToken = true;
                o.TokenValidationParameters = new TokenValidationParameters()
                {
-                   ValidateIssuer = true,
-                   ValidateAudience = true,
+                   ValidateIssuer = false,
+                   ValidateAudience = false,
                    ValidateLifetime = true,
                    ValidateIssuerSigningKey = true,
                    ValidIssuer = Configuration["JWT:Issuer"],
@@ -51,6 +51,7 @@ namespace WebServerSideAPI
            });
             services.AddSingleton<IJWTManagerRepository, JWTManagerRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddDbContext<DataContext>(options =>
             options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
          

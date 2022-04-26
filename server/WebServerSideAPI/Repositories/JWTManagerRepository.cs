@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.Http;
 using WebServerSideAPI.Models;
 
 namespace WebServerSideAPI.Repositories
@@ -22,10 +24,10 @@ namespace WebServerSideAPI.Repositories
             this.iconfiguration = iconfiguration;
         }
 
-        public Tokens Authenticate(Users users)
+        public Tokens Authenticate(UserLogin users, bool isValidPassword)
         {
-            if (!UsersRecords.Any(x => x.Key == users.Name && x.Value == users.Password))
-                 throw new AccessViolationException();
+            if (!isValidPassword)
+                throw new HttpResponseException(HttpStatusCode.Unauthorized);
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = System.Text.Encoding.UTF8.GetBytes(iconfiguration["JWT:Key"]);

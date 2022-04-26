@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WebServerSideAPI.Models;
 using WebServerSideAPI.Repositories;
@@ -18,26 +20,69 @@ namespace WebServerSideAPI.Controllers
     {
         private readonly DataContext db;
         private readonly IJWTManagerRepository jWTManager;
-        public CategoriesController(DataContext db, IJWTManagerRepository jWTManager)
+        private readonly IUserRepository userRepository;
+        private readonly string pattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{8,}$";
+
+        public CategoriesController(DataContext db, IJWTManagerRepository jWTManager, IUserRepository userRepository)
         {
             this.db = db;
             this.jWTManager = jWTManager;
+            this.userRepository = userRepository;
         }
         //-----------------------------------------------------------------------------
         //---------------------------  Auth METHODS   ----------------------------------
         //-----------------------------------------------------------------------------
         [AllowAnonymous]
+        [HttpPost("signup")]
+        public IActionResult PostUser([FromBody] Users user)
+        {
+            bool isMatch = Regex.IsMatch(user.Password, pattern);
+            if (isMatch && user.Password == user.MatchPassword)
+            {
+                {
+                    var hashedPasswordUser = this.userRepository.Signup(user);
+                    var data = db.Users.SingleOrDefault(a => a.Name == hashedPasswordUser.Name);
+                    if (hashedPasswordUser != null && data == null)
+                    {
+
+                        db.Users.Add(hashedPasswordUser);
+                        db.SaveChanges();
+
+                        return Ok(hashedPasswordUser);
+                    }
+                    else
+                        return BadRequest("This email is avaliable in the system");
+                }
+
+            }
+
+            return BadRequest("Invalid password");
+        }
+
+        [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate(Users usersdata)
+        public IActionResult Authenticate(UserLogin usersdata)
         {
             try
             {
-                var token = jWTManager.Authenticate(usersdata);
-                return Ok(token);
-            } catch (Exception o)
+                var user = db.Users.SingleOrDefault(x=> x.Name == usersdata.Name);
+                if (user != null)
+                {
+                    bool isValidPassword = BCrypt.Net.BCrypt.Verify(usersdata.Password, user.Password);
+                    var token = jWTManager.Authenticate(usersdata, isValidPassword);
+                    return Ok(token);
+                }
+                return BadRequest("No user available");
+
+            }
+            catch (SqliteException)
             {
-                return Unauthorized("There is no user registered to this application");
-            }       
+                return BadRequest("No user available");
+            }
+            catch (Exception)
+            {
+                return Unauthorized("Password does not match");
+            }  
         }
             //-----------------------------------------------------------------------------
             //---------------------------  GET METHODS   ----------------------------------
@@ -145,13 +190,13 @@ namespace WebServerSideAPI.Controllers
             return NotFound();
         }
 
-        //-----------------------------------------------------------------------------
-        //---------------------------  PUT METHODS   ----------------------------------
-        //-----------------------------------------------------------------------------
+            //-----------------------------------------------------------------------------
+            //---------------------------  PUT METHODS   ----------------------------------
+            //-----------------------------------------------------------------------------
 
-        // --- Update the Category
+            // --- Update the Category
 
-        [HttpPut("{id}")]
+            [HttpPut("{id}")]
         public IActionResult Put(int id, Categories Categories)
         {
             if (id != Categories.CategoryId) return BadRequest();

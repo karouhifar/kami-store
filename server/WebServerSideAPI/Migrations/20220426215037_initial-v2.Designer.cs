@@ -8,8 +8,8 @@ using WebServerSideAPI.Models;
 namespace WebServerSideAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220422002058_initail")]
-    partial class initail
+    [Migration("20220426215037_initial-v2")]
+    partial class initialv2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -124,6 +124,29 @@ namespace WebServerSideAPI.Migrations
                             unitsInStock = 2,
                             unitsOnOrder = 6
                         });
+                });
+
+            modelBuilder.Entity("WebServerSideAPI.Models.Users", b =>
+                {
+                    b.Property<int>("userID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("userID");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("WebServerSideAPI.Models.Products", b =>

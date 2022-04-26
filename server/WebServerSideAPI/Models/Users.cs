@@ -1,13 +1,19 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebServerSideAPI.Models
 {
-    public class Users
+
+    public class Users : UserLogin
     {
-        public string Name { get; set; }
-        public string Password { get; set; }
+        [Key, Required]
+        public int userID { get; set; }
+
+        [Required , Compare("Password", ErrorMessage = "password must match together")]
+        [NotMapped]
+        public string MatchPassword { get; set; }
     }
 }

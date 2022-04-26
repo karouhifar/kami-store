@@ -6,8 +6,8 @@ using WebServerSideAPI.Models;
 
 namespace WebServerSideAPI.Repositories
 {
-    public interface IJWTManagerRepository
+    public interface IUserRepository
     {
-        Tokens Authenticate(UserLogin users, bool isValidPassword);
+        Users Signup(Users users);
     }
 }
