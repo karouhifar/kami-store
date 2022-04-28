@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { authTokenJWT } from "./authToken";
 import {
   productReducer,
   selectedProductReducer,
@@ -13,6 +14,7 @@ const reducers = combineReducers({
   filterProduct: setFilterProducts,
   category: setCategoryReducer,
   categoryID: getCategoryID,
+  AuthToken: authTokenJWT,
 });
 
 export default reducers;

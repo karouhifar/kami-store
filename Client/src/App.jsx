@@ -8,6 +8,8 @@ import ProductForm from "./containers/ProductForm";
 import CategoryForm from "./containers/CategoryForm";
 import Footer from "./containers/Footer";
 import CategoryUpdate from "./containers/CategoryUpdate";
+import Register from "./containers/Register";
+import Login from "./containers/Login";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route path="/category/:id/addProduct" component={ProductForm} />
         <Route path="/category/CategoryForm" component={CategoryForm} />
         <Route path="/category/:id/CategoryUpdate" component={CategoryUpdate} />
+        <Route path="/register" component={Register} />ِ
+        <Route path="/login" component={Login} />ِ
         <Route path="*" component={NoPage} />
       </Switch>
       <Footer />
