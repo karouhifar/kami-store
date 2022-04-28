@@ -1,21 +1,19 @@
 import axios from "axios";
 import endPoint from "./EndPoint";
 
-async function login(username, password) {
-  const body = JSON.stringify({ username, password });
-
+async function login(userData) {
   const user = await axios
-    .post(`${endPoint.API_STRING}/api/Categories`, body)
+    .post(`${endPoint.API_STRING}/api/Categories/authenticate`, userData)
     .catch((err) => console.log(err));
-  if (!user.data) {
+  if (!user) {
     if (user.status === 401) logout();
     const error = user && user.statusText;
     return Promise.reject(error);
   }
 
-  const data = user && localStorage.setItem("token", JSON.stringify(user.data));
+  user && localStorage.setItem("token", JSON.stringify(user.data?.token));
 
-  return data;
+  return user.data;
 }
 
 function logout() {
@@ -24,8 +22,10 @@ function logout() {
 
 async function signup(FormData) {
   const res = await axios
-    .post(`${endPoint.API_STRING}/api/Categories.signup`, FormData)
-    .catch((err) => console.log(err));
+    .post(`${endPoint.API_STRING}/api/Categories/signup`, FormData)
+    .catch(() => {
+      throw new Error("Email already avaiable");
+    });
   return res;
 }
 

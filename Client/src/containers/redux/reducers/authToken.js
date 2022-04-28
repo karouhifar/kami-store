@@ -1,24 +1,23 @@
 import { ActionTypes } from "../constants/action-types";
-
+import jwtDecode from "jwt-decode";
 const initialState = {
-  token: null,
-  loading: false,
+  token: localStorage.getItem("token"),
   userData: {},
 };
 
 export const authTokenJWT = (state = initialState, action) => {
+  // const tokenDecodedData = jwtDecode(action.payload);
   switch (action.type) {
     case ActionTypes.LOGIN_TOKEN:
-      const { accessToken, user } = action.payload;
-      state.token = accessToken;
-      state.userData = user;
-      state.loading = false;
-      return { ...state, TokenIn: action.payload };
+      return {
+        ...state,
+        token: action.payload?.token,
+        // userData: tokenDecodedData,
+      };
     case ActionTypes.SIGN_OUT_TOKEN:
       state.token = null;
       state.userData = {};
-      state.loading = false;
-      return { ...state, TokenOut: action.payload };
+      return { ...state };
     default:
       return state;
   }
