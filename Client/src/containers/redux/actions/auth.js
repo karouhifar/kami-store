@@ -16,6 +16,7 @@ export const deleteToken = () => {
 export const loadUser = () => {
   return (dispatch, getState) => {
     const token = getState()?.AuthToken;
+    console.log(token);
     if (getState()?.AuthToken.token) {
       dispatch({
         type: ActionTypes.USER_LOADED,

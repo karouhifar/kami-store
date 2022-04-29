@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Nav, Container, Navbar, NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
+import { deleteToken, loadUser } from "./redux/actions/auth";
 import { filteredProducts } from "./redux/actions/product";
 export default function Header() {
   const dispatcher = useDispatch();
+  const history = useHistory();
   const category = useSelector((state) => state.category.category);
   const categoryID = useSelector((state) => state.categoryID.id);
   const filterProduct = (filteredString) => {
     dispatcher(filteredProducts(filteredString));
   };
+  let authTokenJWTState = useSelector((state) => state.AuthToken);
+
   return (
     <Navbar bg="light" expand="lg" className="mb-5">
       <Container fluid className="mx-5">
@@ -25,45 +29,74 @@ export default function Header() {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
-          <Nav className="me-auto my-2 my-lg-0" navbarScroll>
-            <NavLink to="/">Home</NavLink>
-          </Nav>
-          {!categoryID ? (
+          {authTokenJWTState?.token ? (
             <>
-              {category && (
+              <Nav className="me-auto my-2 my-lg-0" navbarScroll>
+                <NavLink to="/">Home</NavLink>
+              </Nav>
+              {!categoryID ? (
                 <>
-                  <Nav className="my-2 my-lg-0" navbarScroll>
-                    <NavLink to="/category/CategoryForm">Add Category</NavLink>
-                  </Nav>
+                  {category && (
+                    <>
+                      <Nav className="my-2 my-lg-0" navbarScroll>
+                        <NavLink to="/category/CategoryForm">
+                          Add Category
+                        </NavLink>
+                      </Nav>
 
-                  <NavDropdown
-                    style={{ color: "black" }}
-                    title="Category Lists"
-                  >
-                    <NavDropdown.Item onClick={() => filterProduct(null)}>
-                      All Categories
-                    </NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    {category?.map((category) => (
-                      <div key={category.categoryId}>
-                        <NavDropdown.Item
-                          onClick={() => filterProduct(category.categoryName)}
-                        >
-                          {category.categoryName}
+                      <NavDropdown
+                        style={{ color: "black" }}
+                        title="Category Lists"
+                      >
+                        <NavDropdown.Item onClick={() => filterProduct(null)}>
+                          All Categories
                         </NavDropdown.Item>
                         <NavDropdown.Divider />
-                      </div>
-                    ))}
-                  </NavDropdown>
+                        {category?.map((category) => (
+                          <div key={category.categoryId}>
+                            <NavDropdown.Item
+                              onClick={() =>
+                                filterProduct(category.categoryName)
+                              }
+                            >
+                              {category.categoryName}
+                            </NavDropdown.Item>
+                            <NavDropdown.Divider />
+                          </div>
+                        ))}
+                      </NavDropdown>
+                      <Nav className="my-2 my-lg-0" navbarScroll>
+                        <NavLink to="/login">
+                          <span
+                            onClick={() => {
+                              dispatcher(deleteToken());
+                              history.push("/login");
+                            }}
+                          >
+                            sign out
+                          </span>
+                        </NavLink>
+                      </Nav>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Nav>
+                    <NavLink to={`/category/${categoryID}/addProduct`}>
+                      Add Product
+                    </NavLink>
+                  </Nav>
                 </>
               )}
             </>
           ) : (
             <>
-              <Nav>
-                <NavLink to={`/category/${categoryID}/addProduct`}>
-                  Add Product
-                </NavLink>
+              <Nav className="me-5 ms-auto my-2 my-lg-0" navbarScroll>
+                <NavLink to="/login">login</NavLink>
+              </Nav>
+              <Nav className=" my-2 my-lg-0" navbarScroll>
+                <NavLink to="/register">register</NavLink>
               </Nav>
             </>
           )}

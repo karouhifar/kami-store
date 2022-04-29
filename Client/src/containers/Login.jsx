@@ -1,38 +1,31 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import { userService } from "../axiosAPI/AuthService";
-import { setToken } from "./redux/actions/auth";
+import { loadUser, setToken } from "./redux/actions/auth";
 export default function Login() {
   const dispatcher = useDispatch();
-  let authTokenJWT = useSelector((state) => state.AuthToken);
-  const [tokentJWT, setTokentJWT] = useState(null);
+  let authTokenJWTState = useSelector((state) => state.AuthToken);
   const [user, setUser] = useState({
     name: "",
     password: "",
   });
-
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (user.password && user.name) {
-        userService.login(user).then((e) => {
-          dispatcher(setToken(e));
-          setUser({
-            name: "",
-            password: "",
-          });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (user.password && user.name) {
+      userService.login(user).then((e) => {
+        dispatcher(setToken(e));
+        setUser({
+          name: "",
+          password: "",
         });
-      }
-    },
-    [user, dispatcher]
-  );
-  useEffect(() => {
-    setTokentJWT(authTokenJWT);
-  }, [authTokenJWT]);
+      });
+    }
+  };
 
-  if (tokentJWT?.token) return <Redirect to="/" />;
-  return (
+  return authTokenJWTState.token ? (
+    <Redirect to="/" />
+  ) : (
     <>
       <form className="container" autoComplete="off" onSubmit={handleSubmit}>
         <div

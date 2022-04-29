@@ -16,9 +16,11 @@ export const authTokenJWT = (state = initialState, action) => {
         tokenDecodedData?.unique_name.split("@")[0];
       return {
         ...state,
+        token: token,
         userData: tokenDecodedData,
       };
     case ActionTypes.SIGN_OUT_TOKEN:
+      localStorage.removeItem("token");
       state.token = null;
       state.userData = {};
       return { ...state };

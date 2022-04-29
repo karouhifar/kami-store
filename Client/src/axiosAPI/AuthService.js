@@ -16,9 +16,7 @@ async function login(userData) {
   return user.data;
 }
 
-function logout() {
-  localStorage.removeItem("token");
-}
+function logout() {}
 
 async function signup(FormData) {
   const res = await axios
@@ -31,6 +29,5 @@ async function signup(FormData) {
 
 export const userService = {
   login,
-  logout,
   signup,
 };
