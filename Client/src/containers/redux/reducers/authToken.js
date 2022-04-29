@@ -6,13 +6,17 @@ const initialState = {
 };
 
 export const authTokenJWT = (state = initialState, action) => {
-  // const tokenDecodedData = jwtDecode(action.payload);
   switch (action.type) {
     case ActionTypes.LOGIN_TOKEN:
+    case ActionTypes.USER_LOADED:
+      const { token } = action?.payload;
+
+      const tokenDecodedData = jwtDecode(token);
+      tokenDecodedData.unique_name =
+        tokenDecodedData?.unique_name.split("@")[0];
       return {
         ...state,
-        token: action.payload?.token,
-        // userData: tokenDecodedData,
+        userData: tokenDecodedData,
       };
     case ActionTypes.SIGN_OUT_TOKEN:
       state.token = null;

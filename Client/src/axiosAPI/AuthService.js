@@ -11,7 +11,7 @@ async function login(userData) {
     return Promise.reject(error);
   }
 
-  user && localStorage.setItem("token", JSON.stringify(user.data?.token));
+  user && localStorage.setItem("token", user.data?.token);
 
   return user.data;
 }

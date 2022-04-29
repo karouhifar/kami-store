@@ -1,8 +1,13 @@
 import axios from "axios";
+import { setHeaders } from "../utils";
 import endPoint from "./EndPoint";
 export default async function PostProduct(id, FormData) {
   const res = await axios
-    .post(`${endPoint.API_STRING}/api/Categories/${id}/PostProduct`, FormData)
+    .post(
+      `${endPoint.API_STRING}/api/Categories/${id}/PostProduct`,
+      FormData,
+      setHeaders()
+    )
     .catch((err) => console.log(err));
   return res;
 }

@@ -12,3 +12,15 @@ export const deleteToken = () => {
     type: ActionTypes.SIGN_OUT_TOKEN,
   };
 };
+
+export const loadUser = () => {
+  return (dispatch, getState) => {
+    const token = getState()?.AuthToken;
+    if (getState()?.AuthToken.token) {
+      dispatch({
+        type: ActionTypes.USER_LOADED,
+        payload: token,
+      });
+    } else return null;
+  };
+};

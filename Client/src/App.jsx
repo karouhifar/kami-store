@@ -10,8 +10,17 @@ import Footer from "./containers/Footer";
 import CategoryUpdate from "./containers/CategoryUpdate";
 import Register from "./containers/Register";
 import Login from "./containers/Login";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loadUser } from "./containers/redux/actions/auth";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
+  let authTokenJWT = useSelector((state) => state.AuthToken);
+  console.log(authTokenJWT);
   return (
     <div className="App">
       <Header />
