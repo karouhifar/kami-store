@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { userService } from "../axiosAPI/AuthService";
-import { loadUser, setToken } from "./redux/actions/auth";
+import { setToken } from "./redux/actions/auth";
 export default function Login() {
   const dispatcher = useDispatch();
   let authTokenJWTState = useSelector((state) => state.AuthToken);

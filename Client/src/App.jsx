@@ -1,5 +1,5 @@
 import "./App.css";
-import { Switch, Route, Redirect, useHistory } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import Header from "./containers/Header";
 import ProductListing from "./containers/ProductListing";
 import ProductDetailComponent from "./containers/ProductDetailComponent";

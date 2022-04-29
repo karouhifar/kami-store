@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Nav, Container, Navbar, NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
-import { deleteToken, loadUser } from "./redux/actions/auth";
+import { deleteToken } from "./redux/actions/auth";
 import { filteredProducts } from "./redux/actions/product";
 export default function Header() {
   const dispatcher = useDispatch();
