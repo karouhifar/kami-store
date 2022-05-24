@@ -1,4 +1,4 @@
-# Kami Store Project using React,Redux,ASP.NET Core libraries and tools
+# Persian Store Project using React,Redux,ASP.NET Core libraries and tools
 
 ### [Live Demo](https://kamistore-60f52.web.app/)
 
